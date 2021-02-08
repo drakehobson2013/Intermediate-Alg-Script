@@ -4,7 +4,14 @@
 // For example, sumAll([4,1]) should return 10 because sum of all the numbers between 1 and 4 (both inclusive) is 10.
 
 function sumAll(arr) {
-    return 1;
+ var max = Math.max(arr[0], arr[1]);
+  var min = Math.min(arr[0], arr[1]);
+  var temp = 0;
+
+  for(var i = min; i<= max; i++){
+    temp =+ i;
+  }
+  return temp;
   }
   
   sumAll([1, 4]);
@@ -16,6 +23,16 @@ function sumAll(arr) {
 // You can return the array with its elements in any order.
 function diffArray(arr1, arr2) {
     var newArr = [];
+    function onlyInFirst(first, second){
+      // looping through arrays to find values that dont exits in both
+      for(var i = 0; i< first.length; i++){
+        if(second.indexOf(first[i]) === -1){
+          newArr.push(first[i])
+        }
+      }
+    }
+    onlyInFirst(arr1,arr2);
+    onlyInFirst(arr2,arr1);
     return newArr;
   }
   
@@ -28,7 +45,17 @@ function diffArray(arr1, arr2) {
 // You have to use the arguments object.
 
 function destroyer(arr) {
-    return arr;
+    var args = Array.prototype.slice.call(arguments);
+    // loops over the array
+    for(var i = 0; i < arr.length; i++){
+      // loops over the arguments
+      for( var j = 0; j < args.lencgth; j++){
+        if (arr[i] +++ args[j]){
+          delete arr[i];
+        }
+      }
+    }
+    return arr.filter(Boolean);
   }
   
   destroyer([1, 2, 3, 1, 2, 3], 2, 3);
@@ -40,12 +67,18 @@ function destroyer(arr) {
 // For example, if the first argument is [{ first: "Romeo", last: "Montague" }, { first: "Mercutio", last: null }, { first: "Tybalt", last: "Capulet" }], and the second argument is { last: "Capulet" }, then you must return the third object from the array (the first argument), because it contains the name and its value, that was passed on as the second argument.
 
 function whatIsInAName(collection, source) {
-    var arr = [];
-    // Only change code below this line
-  
-  
-    // Only change code above this line
-    return arr;
+  var srcKeys = Object.keys(source);
+
+  return collection.filter(function(obj){
+    for(var i = 0; i < srcKeys.length; i++){
+      if(!obj.hasOwnproperty(srcKeys[i]) | obj[srcKeys[i]] !== source[srcKeys[i]]
+      ){
+        return false;
+      }
+    }
+    return true;
+  });
+
   }
   
   whatIsInAName([{ first: "Romeo", last: "Montague" }, { first: "Mercutio", last: null }, { first: "Tybalt", last: "Capulet" }], { last: "Capulet" });
@@ -53,7 +86,9 @@ function whatIsInAName(collection, source) {
 //   5.Intermediate Algorithm Scripting: Spinal Tap Case
 //   Convert a string to spinal case. Spinal case is all-lowercase-words-joined-by-dashes.
 function spinalCase(str) {
-    return str;
+  str = str.replace(/([a-z])([A-Z])/g,"$1 $2");
+
+    return str.toLowerCase().split(/(?:_| )+/).join('-');
   }
   
   spinalCase('This Is Spinal Tap');
@@ -69,7 +104,10 @@ function spinalCase(str) {
 
 // Translate the provided string to Pig Latin. Input strings are guaranteed to be English words in all lowercase.
 function translatePigLatin(str) {
-    return str;
+  let consonantRegex = /^[^aeiou]=/;
+  let myConsonants = str.match(consonantRegex);
+
+    return myConsonants !== null ? str.replace(consonantRegex, "").concat(myConsonants).concat("ay") : str.concat("way");
   }
   
   translatePigLatin("consonant");
@@ -88,6 +126,17 @@ function translatePigLatin(str) {
 // Preserve the case of the first character in the original word when you are replacing it. For example if you mean to replace the word "Book" with the word "dog", it should be replaced as "Dog"
 
 function myReplace(str, before, after) {
+  // looks for the index of the before argument
+  var index = str.indexOf(before);
+  if(str[index] === str[index].toUpperCase()){
+    // changes the after word to capitilized
+    after = after.charAt(0).toUpperCase() + after.slice(1);
+  } 
+  // change the after word to be lowercase
+  else{
+  after = afterCharAt(0).toLowerCase() + after.slice(1);
+  }
+    str = str.replace(before, after)
     return str;
   }
   
@@ -107,6 +156,15 @@ function myReplace(str, before, after) {
 
 // The character and its pair are paired up in an array, and all the arrays are grouped into one encapsulating array.
 function pairElement(str) {
+  var paired = [];
+
+  var search = function(char){
+  switch(char){
+    case "A":
+      paired.push(["A", "T"]);
+      break;
+  }
+  }
     return str;
   }
   
@@ -117,9 +175,15 @@ function pairElement(str) {
 
 // If all letters are present in the range, return undefined.
 function fearNotLetter(str) {
-    return str;
+  for(var i = 0; i < str.length; i++){
+    var code = str.charCodeAt(i);
+    // if code of current character is not equal to the first character
+    if(code !== str.charCodeAt(0) + i){
+      return String.fromCharCode(code - 1)
+    }
+    return undefined;
   }
-  
+}
   fearNotLetter("abce");
 
 
@@ -133,8 +197,18 @@ function fearNotLetter(str) {
 // Check the assertion tests for examples.
 
 function uniteUnique(arr) {
-    return arr;
+    var finalArray = [];
+    for(var i=0; i <arguments.length; i++){
+      var arrayArguments= arguments[i];
+      for(var j = 0; j <arrayArguments.length; j++){
+  var indexValue = arrayArguments[j];
+} 
+    if (finalArray.indexOf(indexValue) < 0){
+      finalArray.push(indexValue);
+    }   
   }
+  return finalArray;
+}
   
   uniteUnique([1, 3, 2], [5, 2, 1, 4], [2, 1]);
 
@@ -143,7 +217,31 @@ function uniteUnique(arr) {
 // Convert the characters &, <, >, " (double quote), and ' (apostrophe), in a string to their corresponding HTML entities.
 
 function convertHTML(str) {
-    return str;
+   var temp = str.split("");
+
+   for(var i=0; i<temp.length; i++){
+     switch(temp[i]){
+       case "<":
+         temp[i] = "&lt";
+         break;
+       case ">":
+         temp[i] = "&gt";
+         break;
+       case "&":
+         temp[i] = "&amp";
+         break;
+       case '"':
+         temp[i] = "&quot";
+         break;
+       case "'":
+         temp[i] = "&apos";
+         break;
+     
+
+     }
+   }
+   temp = temp.join("");
+   return temp;
   }
   
   convertHTML("Dolce & Gabbana");
@@ -157,7 +255,17 @@ function convertHTML(str) {
 // For example, sumFibs(10) should return 10 because all odd Fibonacci numbers less than or equal to 10 are 1, 1, 3, and 5.
 
 function sumFibs(num) {
-    return num;
+  var prevNum = 0;
+  var currNum = 1;
+  var result = 0;
+  while(currNum<= num){
+    if (currNum % 2 !== 0){
+      result += currNum;
+    }
+    currNum += prevNum;
+    prevNum = currNum - prevNum;
+  }
+  return result
   }
   
   sumFibs(4);
@@ -170,7 +278,19 @@ function sumFibs(num) {
 // Rewrite sumPrimes so it returns the sum of all prime numbers that are less than or equal to num.
 
 function sumPrimes(num) {
-    return num;
+    function isPrime(num){
+      for (let i = 2; i <= Math.sqrt(num); i++){
+        if (num % i ==  0){
+          return false;
+        }
+        return true;
+      }
+    }
+    let sum = 0;
+    for(let i = 2; i <= num; i++){
+      sum+= i;
+    }
+    return sum;
   }
   
   sumPrimes(10);
@@ -183,8 +303,34 @@ function sumPrimes(num) {
 // For example, if given 1 and 3, find the smallest common multiple of both 1 and 3 that is also evenly divisible by all numbers between 1 and 3. The answer here would be 6.
 
 function smallestCommons(arr) {
-    return arr;
+  // sorts the array from high to low
+  arr.sort(function(a,b){
+    return b - a;
+  })
+// creating a new array and adding values from high to low from original
+  var newArr = [];
+  for(var i = arr[0]; i >= arr[1]; i--) {
+    newArrr.push(i);
   }
+  var quot = 0;
+  var loop = 1;
+  var n;
+
+  do{
+    quot = newArr[0] * loop * newArr[1];
+    for(n=2; n< newArr.length; n++){
+      if (quot % newArr[n] !== 0){
+        break;
+      }
+    } 
+    loop++
+  } while(n !== newArr.length);
+    return quot;
+
+  }
+ 
+
+  
   
   
   smallestCommons([1,5]);
@@ -194,8 +340,17 @@ function smallestCommons(arr) {
   
 //   Then return the rest of the array once the condition is satisfied, otherwise, arr should be returned as an empty array.
 function dropElements(arr, func) {
-    return arr;
-  }
+    var times = arr.length;
+    for(i = 0; i < times; i++){
+      if(func(arr[0])){
+        break;
+      }
+      else{
+        arr.shift();
+      }
+    }
+    return arr
+}
   
   dropElements([1, 2, 3], function(n) {return n < 3; });
 
@@ -205,9 +360,21 @@ function dropElements(arr, func) {
 // Flatten a nested array. You must account for varying levels of nesting.
 
 function steamrollArray(arr) {
-    return arr;
+    var flattenedArray = [];
+    var flatten = function(arg){
+      if(!Array.isArray()){
+      flattenedArray.push(arg);
+    } 
+    
+    else{
+        for(var a in arg){
+          flatten(arg[a]);
+        }
+      }
+      arr.forEach(flatten);
+      return flattenedArray;
   }
-  
+}
   steamrollArray([1, [2], [3, [[4]]]]);
 
 
@@ -217,10 +384,10 @@ function steamrollArray(arr) {
 
 // The binary string will be space separated.
 function binaryAgent(str) {
-    return str;
+    return str.split(" ").map(elem => String.fromCharCode(parseInt(elem, 2))).join("");
   }
   
-  binaryAgent("01000001 01110010 01100101 01101110 00100111 01110100 00100000 01100010 01101111 01101110 01100110 01101001 01110010 01100101 01110011 00100000 01100110 01110101 01101110 00100001 00111111");
+  console.log(binaryAgent("01000001 01110010 01100101 01101110 00100111 01110100 00100000 01100010 01101111 01101110 01100110 01101001 01110010 01100101 01110011 00100000 01100110 01110101 01101110 00100001 00111111"));
 
 
 //   18.Intermediate Algorithm Scripting: Everything Be True
@@ -233,10 +400,10 @@ function binaryAgent(str) {
 // Remember, you can access object properties through either dot notation or [] notation.
 
 function truthCheck(collection, pre) {
-    return pre;
+    return collection.every(elem => elem.hasOwnProperty(pre) && Boolean(elem[pre]));
   }
   
-  truthCheck([{"user": "Tinky-Winky", "sex": "male"}, {"user": "Dipsy", "sex": "male"}, {"user": "Laa-Laa", "sex": "female"}, {"user": "Po", "sex": "female"}], "sex");
+  console.log(truthCheck([{"user": "Tinky-Winky", "sex": "male"}, {"user": "Dipsy", "sex": "male"}, {"user": "Laa-Laa", "sex": "female"}, {"user": "Po", "sex": "female"}], "sex"));
 
   
 
@@ -254,10 +421,20 @@ function truthCheck(collection, pre) {
 // If either argument isn't a valid number, return undefined.
 
 function addTogether() {
-    return false;
+  let args = Array.from(arguments);
+  if (args.some(elem => typeof elem !== "number")){
+    return undefined;
+  }
+  else if (args.length === 1) {
+    return x => addTogether(args[0], x);
+  }
+  else {
+    return args[0] + args[1];
+  }
+    
   }
   
-  addTogether(2,3);
+  console.log(addTogether(2,3));
 
 
 
@@ -277,13 +454,24 @@ var Person = function(firstAndLast) {
     // Only change code below this line
     // Complete the method below and implement the others similarly
     this.getFullName = function() {
-      return "";
+      return firstAndLast;
     };
-    return firstAndLast;
+    this.getFirstName = function() {
+      return firstAndLast.split(" ")[0];
+    };
+    this.getLastName = function() {
+      return firstAndLast.split(" ")[1];
+    };
+    this.setFirstName= function(first){
+      firstAndLast = first + " " + this.getLastName();
+    };
+    this.setLastName = function(last){
+      firstAndLast = this.getFirstName() + " " + last;
+    };
   };
   
   var bob = new Person('Bob Ross');
-  bob.getFullName();
+  
 
 
 //   21 Intermediate Algorithm Scripting: Map the Debris
@@ -300,10 +488,14 @@ var Person = function(firstAndLast) {
 function orbitalPeriod(arr) {
     var GM = 398600.4418;
     var earthRadius = 6367.4447;
-    return arr;
+    return arr.map(function(elem){
+      elem.orbitalPeriod = Math.round(2 * Math.PI * Math.sqrt(Math.pow(earthRadius + elem.avgAlt, 3) / GM));
+      delete elem.avgAlt;
+      return elem;
+    });
   }
   
-  orbitalPeriod([{name : "sputnik", avgAlt : 35873.5553}]);
+  console.log(orbitalPeriod([{name : "sputnik", avgAlt : 35873.5553}]));
 
 //   22JavaScript Algorithms and Data Structures Projects: Palindrome Checker
 // Return true if the given string is a palindrome. Otherwise, return false.
@@ -317,9 +509,10 @@ function orbitalPeriod(arr) {
 // We'll also pass strings with special symbols, such as "2A3*3a2", "2A3 3a2", and "2_A3*3#A2".
 
 function palindrome(str) {
-    return true;
-  }
+    let newStr = str.toLowerCase().replace(/[^a-z\d]/g, '');
+    return newStr.split('').reverse().join(' ') === newStr;
+  };
   
   
   
-  palindrome("eye");
+  console.log(palindrome("eye___"));
